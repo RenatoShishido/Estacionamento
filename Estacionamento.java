@@ -1,44 +1,51 @@
 import java.util.Scanner;
 
 public class Estacionamento {
-
 	public static void main(String[] args) {
+		// Fila de entrada e duas garagens.
+		Fila<String> fe = new Fila<>();
+		Pilha<String> g1 = new Pilha<>();
+		Pilha<String> g2 = new Pilha<>();
+
 		Scanner sc = new Scanner(System.in);
-		Fila fila = new Fila();
-		Pilha pilha = new Pilha(3);
-		Pilha pilha2 = new Pilha(3);
-		int contador = -1;
-		int cont = -1;
 		while (true) {
 			String[] solicitacao = sc.nextLine().split(" ");
 			if (solicitacao[0].equals("FIM"))
 				break;
 			else if (solicitacao[0].equals("ESTACIONA")) {
-				contador = contador + 1;
-				System.out.println(fila.itens[contador] + ": FE -> G1");
-				pilha.empilha(fila.desenfileirar());
-				
+				// Tirar primeiro carro da FE.
+				String carro = fe.desenfileirar();
+				// Estaciona em G1.
+				g1.empilhar(carro);
+				// Exibe mensagem.
+				System.out.printf("%s: FE -> G1\n", carro);
 			} else if (solicitacao[0].equals("ENTRA")) {
-				fila.enfileirar(solicitacao[1]);
+				// Chegou um carro. Entra na fila de entrada.
+				fe.enfileirar(solicitacao[1]);
 			} else if (solicitacao[0].equals("SAI")) {
-				for(int i = pilha.topo; i >= 0; i--)
-				{
-					if(pilha.vet[i].equals(solicitacao[1]))
-					{
-						pilha.desempilha();
-					}
-					else
-					{
-						System.out.println(pilha.desempilhar()+ ": G1 -> G2");
-						pilha2.empilha(pilha.desempilha());
-					}
+				// Um carro é solicitado.
+				String carro = solicitacao[1];
+
+				// Remove carros bloqueando o carro em G1.
+				String carro2 = g1.desempilhar();
+				while (!carro2.equals(carro)) {
+					g2.empilhar(carro2);
+					System.out.printf("%s: G1 -> G2\n", carro2);
+					carro2 = g1.desempilhar();
 				}
-				for(int i = pilha2.topo;  i >= 0 ; i--)
-				{
-					System.out.println(pilha2.desempilhar()+ ": G2 -> G1");
-					pilha.empilha(pilha2.desempilha());
+
+				// Carro sairá agora.
+				System.out.printf("%s: G1 -> SAIDA\n", carro);
+
+				// Manobra todos os carros de G2 para G1.
+				while (!g2.vazia()) {
+					// Retira carro de G2.
+					String carro3 = g2.desempilhar();
+					// Estaciona em G1.
+					g1.empilhar(carro3);
+					// Exibe mensagem.
+					System.out.printf("%s: G2 -> G1\n", carro3);
 				}
-					pilha.mostrar();
 			}
 		}
 	}

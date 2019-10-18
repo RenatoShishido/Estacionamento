@@ -14,20 +14,15 @@ public class Pilha<T> implements InterfacePilha<T>
         vet = (T[]) new Object[capacidade];
         topo=-1;
     }
-    public void empilha(T pilha)
+    public void empilhar(T pilha)
     {
         vet[++topo] = pilha; 
-    }
-    public T desempilha()
-    {
-        T item = vet[topo];
-        vet[topo] = null;
-        topo--;
-        return item;
     }
     public T desempilhar()
     {
         T item = vet[topo];
+        vet[topo] = null;
+        topo--;
         return item;
     }
     public T topo()

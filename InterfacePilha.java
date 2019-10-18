@@ -1,7 +1,7 @@
 public interface InterfacePilha<T>
 {
-    void empilha(T itens);
-    T desempilha();
+    void empilhar(T itens);
+    T desempilhar();
     T topo();
     boolean vazia();
     int tamanho();
